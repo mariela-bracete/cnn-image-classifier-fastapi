@@ -32,6 +32,34 @@ Built as part of Columbia University's Applied Generative AI coursework.
 - FastAPI + Uvicorn server
 - Swagger/OpenAPI documentation## Features
 
+## Model Architectures
+
+### AssignmentCNN
+
+CNN architecture created to match the specifications from Columbia University's Assignment 2:
+
+- Input: 64×64×3
+- Conv2D(16, 3×3)
+- ReLU
+- MaxPool2D
+- Conv2D(32, 3×3)
+- ReLU
+- MaxPool2D
+- FC(100)
+- FC(10)
+
+### EnhancedCNN
+
+Improved CNN architecture used for CIFAR-10 image classification:
+
+- 4 convolutional layers
+- Batch Normalization
+- Max Pooling
+- Dropout
+- Fully connected classifier
+
+The AssignmentCNN model is included to satisfy the architecture requirements of Assignment 2. The API endpoint uses the EnhancedCNN model trained on CIFAR-10.
+
 ## API Documentation
 
 Interactive Swagger UI available through FastAPI.
