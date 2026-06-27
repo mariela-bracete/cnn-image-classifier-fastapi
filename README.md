@@ -1,72 +1,76 @@
-# CNN Image Classification API with FastAPI
+# CNN Image Classification & MNIST WGAN API
 
-A Dockerized REST API built with FastAPI that provides:
+A Dockerized REST API built with **FastAPI** that exposes multiple machine learning models through a simple HTTP interface.
+Developed as part of Columbia University's **Applied Generative AI** coursework.
 
-- CNN-based image classification trained on CIFAR-10
-- Bigram text generation
-- Word embeddings using spaCy
-- Interactive API documentation via Swagger/OpenAPI
-
-Built as part of Columbia University's Applied Generative AI coursework.
+---
 
 ## Features
 
-### REST API Endpoints
+The API currently supports four machine learning capabilities:
 
-- `/generate` – Bigram text generation
-- `/embedding` – Text embeddings using spaCy
-- `/classify-image` – CNN image classification
+* **Bigram text generation**
+* **Word embeddings using spaCy**
+* **CNN image classification (CIFAR-10)**
+* **MNIST handwritten digit generation using a Wasserstein GAN (WGAN)**
 
-### Image Classification
+Interactive API documentation is automatically available through Swagger/OpenAPI.
 
-- Convolutional Neural Network (CNN) trained on CIFAR-10
-- PyTorch model persistence (`.pth`)
-- Image upload and prediction via REST API
-- Confidence score returned with prediction
+---
 
-**Supported classes:** airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck
+## API Endpoints
 
-### Deployment
+| Endpoint                     | Description                                                   |
+| ---------------------------- | ------------------------------------------------------------- |
+| `POST /generate`             | Generate text using the trained Bigram model                  |
+| `POST /embedding`            | Return a spaCy embedding for a word                           |
+| `POST /classify-image`       | Classify an uploaded image using the trained CNN              |
+| `POST /generate-mnist-digit` | Generate a new handwritten MNIST digit using the trained WGAN |
 
-- Dockerized application
-- FastAPI + Uvicorn server
-- Swagger/OpenAPI documentation## Features
+---
 
-## Model Architectures
+## CNN Image Classification
 
-### AssignmentCNN
+The image classification endpoint uses a Convolutional Neural Network trained on the CIFAR-10 dataset.
 
-CNN architecture created to match the specifications from Columbia University's Assignment 2:
+Features include:
 
-- Input: 64×64×3
-- Conv2D(16, 3×3)
-- ReLU
-- MaxPool2D
-- Conv2D(32, 3×3)
-- ReLU
-- MaxPool2D
-- FC(100)
-- FC(10)
+* PyTorch model persistence (`.pth`)
+* Image upload via REST API
+* Predicted class
+* Confidence score
 
-### EnhancedCNN
+Supported classes:
 
-Improved CNN architecture used for CIFAR-10 image classification:
+* airplane
+* automobile
+* bird
+* cat
+* deer
+* dog
+* frog
+* horse
+* ship
+* truck
 
-- 4 convolutional layers
-- Batch Normalization
-- Max Pooling
-- Dropout
-- Fully connected classifier
+---
 
-The AssignmentCNN model is included to satisfy the architecture requirements of Assignment 2. The API endpoint uses the EnhancedCNN model trained on CIFAR-10.
+## MNIST Digit Generation (WGAN)
 
-## API Documentation
+Assignment 3 adds a Wasserstein Generative Adversarial Network (WGAN) capable of generating synthetic handwritten digits.
 
-Interactive Swagger UI available through FastAPI.
+The implementation includes:
 
-## Containerization
+* Generator network
+* Critic network
+* Wasserstein loss
+* Trained PyTorch checkpoint
+* FastAPI endpoint returning generated PNG images
+* Docker deployment support
 
-Application is fully containerized using Docker for consistent deployment.
+Calling: POST /generate-mnist-digit returns a newly generated handwritten digit as a PNG image.
+
+---
 
 ## Project Structure
 
@@ -76,9 +80,10 @@ app/
 ├── bigram_model.py
 ├── cnn_model.py
 ├── image_classifier.py
+├── mnist_gan.py
 ├── models/
-│   └── cnn_cifar10.pth
-
+│   ├── cnn_cifar10.pth
+│   └── mnist_wgan_generator.pt
 helper_lib/
 ├── checkpoints.py
 ├── data_loader.py
@@ -86,73 +91,42 @@ helper_lib/
 ├── model.py
 ├── trainer.py
 └── utils.py
-
 train_cnn.py
+train_mnist_gan.py
 Dockerfile
+README.md
 ```
 
-### Example Embedding Request
+---
 
-POST `/embedding`
+## Docker
 
-```json
-{
-  "word": "queen"
-}
-```
-
-### Example Response
-
-```json
-{
-  "word": "queen",
-  "embedding": [...]
-}
-```
-
-### Example Embedding Request
-
-POST `/embedding`
-
-```json
-{
-  "word": "queen"
-}
-```
-
-### Example Response
-
-```json
-{
-  "word": "queen",
-  "embedding": [...]
-}
-```
-
-## Run Locally
-
-### Build Docker Image
+### Build
 
 ```bash
-docker build -t fastapi-ml-api .
+docker build -t assignment3-mnist-gan .
 ```
 
-### Run Container
+### Run
 
 ```bash
-docker run -p 8000:80 fastapi-ml-api
+docker run -p 8000:80 assignment3-mnist-gan
 ```
 
-### Open API Documentation
+---
 
-http://localhost:8000/docs
+## API Documentation
 
-## Technologies Used
+Once running: http://localhost:8000/docs Swagger UI allows interactive testing of every endpoint, including generation of new handwritten digits.
 
-- Python
-- FastAPI
-- PyTorch
-- torchvision
-- spaCy
-- Docker
-- Uvicorn
+---
+
+## Technologies
+
+* Python
+* FastAPI
+* PyTorch
+* torchvision
+* spaCy
+* Docker
+* Uvicorn
